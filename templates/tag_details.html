@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Blogs {% endblock title %}
+
+{% block content %}
+
+<!-- Page Content -->
+<!-- Banner Starts Here -->
+ {% if tag_blogs.count %}
+<div class="heading-page header-text">
+    <section class="page-heading">
+        <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="text-content">
+                <h4>Tag</h4>
+                <h2>{{tag.title|title}}</h2>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+</div>
+
+
+<section class="blog-posts grid-system">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="all-blog-posts">
+                    <div class="row">
+                        {% for blog in blogs %}
+                        <div class="col-lg-6">
+                            <div class="blog-post">
+                                <div class="blog-thumb">
+                                    <img src="{{blog.banner.url}}" alt="">
+                                </div>
+                                <div class="down-content">
+                                    <span>{{blog.category}}</span>
+                                    <a href="{% url 'blog_details' blog.slug %}">
+                                        <h4>{{blog.title}}</h4>
+                                    </a>
+                                    <ul class="post-info">
+                                        <li><a href="{% url 'blog_details' blog.slug %}">{{blog.user.username}}</a></li>
+                                        <li><a href="{% url 'blog_details' blog.slug %}">{{blog.created_date}}</a></li>
+                                        <li><a href="{% url 'blog_details' blog.slug %}">{{blog.blog_review.all.count}} Comments</a></li>
+                                    </ul>
+                                   
+                                    <div class="post-options">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <ul class="post-tags">
+                                                    <li><i class="fa fa-tags"></i></li>
+                                                    {% for tag in blog.tags.all %}
+                                                    <li><a href="{% url 'tag_blogs' tag.slug %}">{{ tag.title }}</a>
+                                                        {% if not forloop.last %},{% endif %}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="col-lg-12">
+                            {% include 'pagination.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include 'sidebar.html' with blogs=recent_blogs %}
+        </div>
+    </div>
+</section>
+{% else %}
+<div class="heading-page header-text">
+    <section class="page-heading">
+        <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="text-content">
+                <h4>Sorry!! blogs not found.</h4>
+                
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+</div>
+{% endif %}
+{% endblock content %}
